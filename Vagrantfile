@@ -16,11 +16,14 @@ Vagrant::Config.run do |config|
   # Boot with a GUI so you can see the screen. (Default is headless)
   # config.vm.boot_mode = :gui
 
+  config.vm.host_name = "dev.rideconmigo.local"
+  config.hosts.aliases = %w(rideconmigo.local)
+
   # Assign this VM to a host-only network IP, allowing you to access it
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :hostonly, "192.168.33.10"
+  config.vm.network :hostonly, "192.168.33.33"
 
   # Assign this VM to a bridged network, allowing you to connect directly to a
   # network using the host's network device. This makes the VM appear as another
@@ -30,13 +33,13 @@ Vagrant::Config.run do |config|
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
   config.vm.forward_port 80, 1337       #nginx
-  #config.vm.forward_port 27017, 27017   #mongodb
-  #config.vm.forward_port 3306, 3306     #mysql
+  config.vm.forward_port 27017, 27017   #mongodb
+  config.vm.forward_port 3306, 3307     #mysql
 
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
-  # config.vm.share_folder "v-data", "/vagrant_data", "../data"
+  config.vm.share_folder "rideconmigo", "/var/www/rideconmigo", "/Users/gwenaelperier/Documents/WORKSPACE/rideconmigo/rideconmigo-project/www/rideConMigo",:extra => 'dmode=777,fmode=777', :nfs => true
 
   # Enable provisioning with Puppet stand alone.  Puppet manifests
   # are contained in a directory path relative to this Vagrantfile.
@@ -63,7 +66,6 @@ Vagrant::Config.run do |config|
     puppet.options = ['--verbose']
    end
 
-
   # Enable provisioning with chef solo, specifying a cookbooks path, roles
   # path, and data_bags path (all relative to this Vagrantfile), and adding 
   # some recipes and/or roles.
@@ -79,31 +81,7 @@ Vagrant::Config.run do |config|
   #   chef.json = { :mysql_password => "foo" }
   # end
 
-  # Enable provisioning with chef server, specifying the chef server URL,
-  # and the path to the validation key (relative to this Vagrantfile).
-  #
-  # The Opscode Platform uses HTTPS. Substitute your organization for
-  # ORGNAME in the URL and validation key.
-  #
-  # If you have your own Chef Server, use the appropriate URL, which may be
-  # HTTP instead of HTTPS depending on your configuration. Also change the
-  # validation key to validation.pem.
-  #
-  # config.vm.provision :chef_client do |chef|
-  #   chef.chef_server_url = "https://api.opscode.com/organizations/ORGNAME"
-  #   chef.validation_key_path = "ORGNAME-validator.pem"
-  # end
-  #
-  # If you're using the Opscode platform, your validator client is
-  # ORGNAME-validator, replacing ORGNAME with your organization name.
-  #
-  # IF you have your own Chef Server, the default validation client name is
-  # chef-validator, unless you changed the configuration.
-  #
-  #   chef.validation_client_name = "ORGNAME-validator"
-
   # allow symlinks in vm
   config.vm.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
   config.vm.customize ["modifyvm", :id, "--memory", "1024"]
-  config.vm.share_folder("v-root", "/vagrant", ".", :extra => 'dmode=770,fmode=770', :nfs => true)
 end
