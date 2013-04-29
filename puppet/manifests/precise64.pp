@@ -52,19 +52,34 @@ class nginx-setup {
     ensure => present,
   }
 
-  file { '/etc/nginx/sites-available/default':
+  file { '/etc/nginx/sites-available/rideconmigo':
     owner  => root,
     group  => root,
     ensure => file,
     mode   => 644,
-    source => '/vagrant/files/nginx/default',
+    source => '/vagrant/files/nginx/rideconmigo',
     require => Package["nginx"],
   }
 
-  file { "/etc/nginx/sites-enabled/default":
+  file { "/etc/nginx/sites-enabled/rideconmigo":
     notify => Service["nginx"],
     ensure => link,
-    target => "/etc/nginx/sites-available/default",
+    target => "/etc/nginx/sites-available/rideconmigo",
+    require => Package["nginx"],
+  }
+  file { '/etc/nginx/sites-available/rockmongo':
+    owner  => root,
+    group  => root,
+    ensure => file,
+    mode   => 644,
+    source => '/vagrant/files/nginx/rockmongo',
+    require => Package["nginx"],
+  }
+
+  file { "/etc/nginx/sites-enabled/rockmongo":
+    notify => Service["nginx"],
+    ensure => link,
+    target => "/etc/nginx/sites-available/rockmongo",
     require => Package["nginx"],
   }
 }
