@@ -57,7 +57,7 @@ class nginx-setup {
     group  => root,
     ensure => file,
     mode   => 644,
-    source => '/vagrant/files/nginx/rideconmigo',
+    source => '/files/nginx/rideconmigo',
     require => Package["nginx"],
   }
 
@@ -65,21 +65,6 @@ class nginx-setup {
     notify => Service["nginx"],
     ensure => link,
     target => "/etc/nginx/sites-available/rideconmigo",
-    require => Package["nginx"],
-  }
-  file { '/etc/nginx/sites-available/rockmongo':
-    owner  => root,
-    group  => root,
-    ensure => file,
-    mode   => 644,
-    source => '/vagrant/files/nginx/rockmongo',
-    require => Package["nginx"],
-  }
-
-  file { "/etc/nginx/sites-enabled/rockmongo":
-    notify => Service["nginx"],
-    ensure => link,
-    target => "/etc/nginx/sites-available/rockmongo",
     require => Package["nginx"],
   }
 }
