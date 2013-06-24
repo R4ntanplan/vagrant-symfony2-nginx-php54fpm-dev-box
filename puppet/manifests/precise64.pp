@@ -57,7 +57,7 @@ class nginx-setup {
     group  => root,
     ensure => file,
     mode   => 644,
-    source => '/files/nginx/rideconmigo',
+    source => '/vagrant/files/nginx/rideconmigo',
     require => Package["nginx"],
   }
 
@@ -195,6 +195,8 @@ class memcached {
 class { 'apt':
   always_apt_update    => true
 }
+
+class { 'elasticsearch': }
 
 Exec["apt-get update"] -> Package <| |>
 
