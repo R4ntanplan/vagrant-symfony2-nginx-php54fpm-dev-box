@@ -196,7 +196,9 @@ class { 'apt':
   always_apt_update    => true
 }
 
-class { 'elasticsearch': }
+class elasticsearch {
+  include elasticsearch
+}
 
 Exec["apt-get update"] -> Package <| |>
 
@@ -208,6 +210,9 @@ include php-with-extensions
 include composer
 include phpqatools
 include memcached
+include elasticsearch
+
+
 
 
 
